@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 13 · Hilos</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Gestión de procesos</span>
+  <h1>Tema 13 · Hilos</h1>
+
+  <div class="intro-desc">
+    Un hilo (<em>thread</em>) es la unidad básica de ejecución dentro de un proceso. Varios hilos de un mismo proceso comparten el código, los datos globales y los archivos abiertos, pero cada uno mantiene su propia pila y registros.
+  </div>
+
+  <div class="simple">
+    👨‍🍳 Un proceso es un restaurante con su cocina. Crear otro proceso es construir otro restaurante entero. Crear un <strong>hilo</strong> es contratar otro cocinero dentro de la misma cocina: comparten nevera y fogones, pero cada uno lleva su propia comanda.
+  </div>
+
+  <section class="sec">
+    <h2>1 · Hilos frente a procesos</h2>
+    <p>
+      Crear un hilo y cambiar entre hilos del mismo proceso es mucho más barato que con procesos completos, porque comparten espacio de direcciones y tabla de páginas. Esto mejora la capacidad de respuesta (un hilo atiende la interfaz gráfica mientras otro descarga archivos) y permite paralelismo real en CPUs multinúcleo.
+    </p>
+    <div class="simple">
+      📚 Varios lectores en la misma mesa comparten los libros (memoria), pero cada uno tiene su propio marcapáginas (contador de programa y pila).
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo en C: crear y esperar un hilo POSIX (<code>pthreads</code>)</summary>
+<pre><code>void *tarea(void *arg) {
+    printf("Hola desde el hilo\n");
+    return NULL;
+}
+pthread_t t;
+pthread_create(&amp;t, NULL, tarea, NULL);
+pthread_join(t, NULL);</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="Un navegador abre una pestaña (proceso)|Crea un hilo para dibujar la interfaz y otro para descargar datos|Ambos hilos comparten la memoria del proceso|Cada hilo tiene su propia pila de llamadas y registros"></div>
+    <div class="q" data-q="¿Qué elemento es privado de cada hilo y NO se comparte?|La pila (stack) y los registros de CPU|Las variables globales|Los archivos abiertos"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · Hilos de usuario vs hilos de núcleo</h2>
+    <p>
+      Los <strong>hilos de usuario</strong> (modelo N:1) los gestiona una biblioteca sin que el kernel los conozca: cambiar de hilo es rapidísimo, pero si uno se bloquea en E/S bloquea a todo el proceso. Los <strong>hilos de núcleo</strong> (modelo 1:1, como Linux <code>pthreads</code>) son planificados directamente por el SO, aprovechando múltiples núcleos.
+    </p>
+    <div class="simple">
+      🧑‍💼 Hilos de usuario: empleados organizados en secreto por el encargado; si uno se atasca en la puerta, paran todos. Hilos de núcleo: el jefe del edificio conoce a cada uno y les asigna distintas cajas.
+    </div>
+    <div class="sim" data-sim="hilos"></div>
+    <div class="ej" data-s="En modelo N:1 el kernel solo ve un flujo de ejecución|Si un hilo pide lectura de disco, el kernel suspende al proceso completo|En modelo 1:1 cada hilo de usuario corresponde a un hilo de núcleo|Si un hilo se bloquea, el kernel sigue ejecutando los demás en otros núcleos"></div>
+    <div class="q" data-q="¿Qué modelo permite ejecutar varios hilos en paralelo en distintos núcleos?|Hilos de núcleo (1:1)|Hilos de usuario (N:1)|Procesamiento por lotes"></div>
+  </section>
+
+  <div class="nav">
+    <a href="12.html">← 12 · Memoria compartida</a>
+    <a href="14.html">14 · Sincronización →</a>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

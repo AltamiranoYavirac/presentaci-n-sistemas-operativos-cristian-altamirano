@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 7 · Operación del sistema</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+  <header>
+    <a href="../index.html">Sistemas Operativos · interactivo</a>
+  </header>
+
+  <main>
+    <span class="badge">Organización</span>
+    <h1>Tema 7 · Operación del sistema</h1>
+
+    <div class="intro-desc">
+      El sistema operativo reacciona a eventos con <b>interrupciones</b>, protege el hardware usando <b>modo usuario y núcleo</b>, evita bloqueos con un <b>temporizador</b> y se inicia mediante una secuencia de <b>arranque</b>.
+    </div>
+
+    <div class="sec">
+      <h2>1 · Interrupciones</h2>
+      <p>Son avisos que pausan lo que hace la CPU para atender algo urgente: un dispositivo (<b>hardware</b>), una petición del programa (<b>trap</b>) o un error (<b>excepción</b>). Al terminar, todo sigue igual.</p>
+      <div class="sim" data-sim="interrupciones"></div>
+      <div class="ej" data-s="Un dispositivo avisa a la CPU|La CPU guarda dónde iba en la pila|Busca qué hacer en la tabla IDT|Atiende el aviso en modo núcleo|Restaura todo y continúa"></div>
+      <div class="q" data-q="¿Qué tipo de interrupción genera un programa al pedir un archivo?|Trap (petición de software)|Interrupción de hardware|Excepción por error"></div>
+    </div>
+
+    <div class="sec">
+      <h2>2 · Modo dual y Temporizador (Timer)</h2>
+      <p>Las aplicaciones corren en <b>Modo Usuario (Ring 3)</b> sin permisos peligrosos, y el sistema en <b>Modo Núcleo (Ring 0)</b> con control total. Además, un <b>reloj (timer)</b> interrumpe periódicamente para que ningún programa acapare la CPU.</p>
+      <div class="sim" data-sim="mododual"></div>
+      <div class="ej" data-s="Una app intenta una orden prohibida|La CPU la bloquea en Ring 3 y lanza alarma|Para cosas seguras usa una syscall (puente)|El reloj Timer reparte turnos entre programas"></div>
+      <div class="q" data-q="¿Para qué sirve el temporizador (timer)?|Evitar que un programa acapare la CPU para siempre|Acelerar el disco duro|Aumentar la memoria RAM"></div>
+    </div>
+
+    <div class="sec">
+      <h2>3 · Arranque del sistema (Boot)</h2>
+      <p>Al encender el equipo, el firmware revisa el hardware y pasa el testigo paso a paso hasta abrir el sistema.</p>
+      <div class="sim" data-sim="arranque"></div>
+      <div class="ej" data-s="BIOS/UEFI revisa CPU y RAM|GRUB carga el sistema elegido|El Kernel prepara drivers y discos|systemd abre la sesión del usuario"></div>
+      <div class="q" data-q="¿Qué se ejecuta primero al encender el PC?|BIOS o UEFI|El escritorio|El navegador"></div>
+    </div>
+
+    <div class="nav">
+      <a href="06.html">← 6 · Interfaz de programación</a>
+      <a href="08.html">8 · Sistemas por su estructura →</a>
+    </div>
+  </main>
+
+  <script src="../js/sims.js"></script>
+  <script src="../js/seccion.js"></script>
+</body>
+</html>

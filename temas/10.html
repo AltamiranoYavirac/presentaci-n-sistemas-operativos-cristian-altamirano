@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 10 · Planificación de la CPU</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Gestión de procesos</span>
+  <h1>Tema 10 · Planificación de la CPU</h1>
+
+  <div class="intro-desc">
+    Cuando varios procesos están listos para ejecutarse, el planificador de la CPU decide cuál ocupa el procesador y durante cuánto tiempo, buscando equilibrar aprovechamiento, equidad y tiempo de respuesta.
+  </div>
+
+  <div class="simple">
+    🛒 Es como organizar la cola de una caja de supermercado: ¿atiendes por orden de llegada, dejas pasar primero a quien lleva dos cosas, o das 1 minuto a cada cliente por turnos?
+  </div>
+
+  <section class="sec">
+    <h2>1 · Algoritmos de planificación: FCFS, SJF y Round Robin</h2>
+    <p>
+      <strong>FCFS</strong> (<em>First Come, First Served</em>) atiende por orden de llegada, pero sufre el <em>efecto convoy</em> si un proceso largo bloquea a los cortos. <strong>SJF</strong> (<em>Shortest Job First</em>) elige el trabajo más corto, minimizando la espera media. <strong>Round Robin</strong> reparte turnos iguales (<em>quantum</em>) de forma circular, ideal para sistemas interactivos.
+    </p>
+    <div class="simple">
+      🎮 Round Robin es como compartir el mando de la consola entre amigos: cada uno juega 5 minutos y pasa el mando al siguiente.
+    </div>
+    <div class="sim" data-sim="plan"></div>
+    <div class="ej" data-s="Llegan los procesos A (ráfaga 5), B (3) y C (8)|FCFS los ejecuta completos en orden A → B → C|SJF elige primero el más corto disponible|Round Robin da un quantum (ej. 2) a cada uno y los rota en la cola"></div>
+    <div class="q" data-q="¿Qué algoritmo reparte la CPU por turnos fijos (quantum)?|Round Robin|FCFS|SJF"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · Criterios de evaluación</h2>
+    <p>
+      Para comparar planificadores medimos: <strong>tiempo de retorno</strong> (desde que llega hasta que termina), <strong>tiempo de espera</strong> (tiempo total en la cola de listos), <strong>tiempo de respuesta</strong> (hasta su primera ejecución) y <strong>productividad</strong> (procesos completados por unidad de tiempo).
+    </p>
+    <div class="simple">
+      ⏱️ En un restaurante: cuánto esperas en la cola (espera), cuánto tardan en servirte el primer plato (respuesta) y cuánto tardas en salir desde que llegaste (retorno).
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo: cálculo de espera y retorno</summary>
+<pre><code>Proceso P: llegada = 0, ráfaga = 5
+Empieza en t = 3, termina en t = 8.
+
+Tiempo de retorno = fin - llegada = 8 - 0 = 8
+Tiempo de espera  = retorno - ráfaga = 8 - 5 = 3</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="Un proceso llega en t=0 con ráfaga 5|Espera mientras otro proceso usa la CPU hasta t=3|Se ejecuta de t=3 a t=8|Su tiempo de retorno es 8 y su espera es 3"></div>
+    <div class="q" data-q="¿Qué mide el tiempo de espera de un proceso?|El tiempo que pasa en la cola de listos sin usar la CPU|El tiempo total ejecutando instrucciones|El tiempo de lectura en disco"></div>
+  </section>
+
+  <div class="nav">
+    <a href="09.html">← 9 · Procesos</a>
+    <a href="11.html">11 · Paso de mensajes →</a>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

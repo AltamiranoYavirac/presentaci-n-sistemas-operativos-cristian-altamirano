@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 20 · Implementación de sistemas de archivos</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Gestión del almacenamiento</span>
+  <h1>Tema 20 · Implementación de sistemas de archivos</h1>
+
+  <div class="intro-desc">
+    La implementación interna del sistema de archivos define cómo se asignan los bloques del disco a cada archivo (contigua, enlazada o indexada) y cómo se lleva la cuenta de los bloques libres disponibles.
+  </div>
+
+  <div class="simple">
+    📚 Para guardar un libro de 4 capítulos en una estantería puedes: poner los 4 tomos seguidos (contigua), poner en cada tomo una nota «el siguiente está en el estante 9» (enlazada) o guardar una ficha índice con los 4 estantes exactos (indexada).
+  </div>
+
+  <section class="sec">
+    <h2>1 · Métodos de asignación de bloques</h2>
+    <p>
+      La <strong>asignación contigua</strong> coloca todo el archivo en bloques consecutivos (muy rápida, pero sufre fragmentación externa y dificultad para crecer). La <strong>enlazada</strong> encadena bloques libres mediante punteros (sin fragmentación externa, pero acceso aleatorio muy lento). La <strong>indexada</strong> agrupa todos los punteros en un bloque índice (como los <em>inodos</em> de UNIX), logrando acceso directo sin fragmentación externa.
+    </p>
+    <div class="simple">
+      🗺️ Indexada es tener el mapa completo del tesoro desde el primer momento, en lugar de ir pista por pista.
+    </div>
+    <div class="sim" data-sim="asignacion_disco"></div>
+    <div class="ej" data-s="Se crea un archivo de 4 bloques|Contigua busca 4 bloques libres seguidos|Enlazada toma 4 bloques sueltos y guarda en cada uno la dirección del siguiente|Indexada guarda las 4 direcciones dentro de un bloque índice"></div>
+    <div class="q" data-q="¿Qué método de asignación usa UNIX mediante los punteros del inodo?|Asignación indexada|Asignación contigua pura|Asignación por lotes"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · Gestión del espacio libre</h2>
+    <p>
+      Para encontrar bloques disponibles rápidamente, el sistema operativo mantiene una estructura de espacio libre, normalmente un <strong>mapa de bits</strong> (1 bit por bloque: <code>0</code>=libre, <code>1</code>=ocupado) o una <strong>lista enlazada de bloques libres</strong>.
+    </p>
+    <div class="simple">
+      🟩 Un mapa de bits es como el panel luminoso de un aparcamiento: cada luz verde (0) o roja (1) te dice al instante si esa plaza está libre.
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo: consultar inodos y bloques libres en Linux con <code>df</code></summary>
+<pre><code>$ df -h /
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p2  200G   68G  122G  36% /
+
+$ df -i /
+Filesystem       Inodes   IUsed    IFree IUse% Mounted on
+/dev/nvme0n1p2 13107200  412300 12694900    4% /</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="El mapa de bits tiene 1 bit por cada bloque del disco|Para asignar un bloque nuevo, el SO busca el primer bit a 0|Cambia ese bit a 1 y entrega el bloque al archivo|Al borrar el archivo, vuelve a poner sus bits a 0"></div>
+    <div class="q" data-q="¿Qué indica cada bit en un mapa de bits de espacio libre?|Si el bloque correspondiente está libre (0) u ocupado (1)|El tamaño en bytes del archivo|Los permisos de ejecución del usuario"></div>
+  </section>
+
+  <div class="nav">
+    <a href="19.html">← 19 · Sistemas de archivos</a>
+    <span></span>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

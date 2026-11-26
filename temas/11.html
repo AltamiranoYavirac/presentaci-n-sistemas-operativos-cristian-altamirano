@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 11 · Paso de mensajes</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Gestión de procesos</span>
+  <h1>Tema 11 · Paso de mensajes</h1>
+
+  <div class="intro-desc">
+    El paso de mensajes permite que procesos independientes intercambien datos sin compartir memoria física. El sistema operativo actúa como intermediario mediante operaciones de envío y recepción.
+  </div>
+
+  <div class="simple">
+    ✉️ Como comunicarse por cartas o mensajería: no compartes escritorio con la otra persona, sino que entregas tu mensaje al cartero (el SO) y él lo deposita en el buzón del destinatario.
+  </div>
+
+  <section class="sec">
+    <h2>1 · Envío, recepción y sincronización</h2>
+    <p>
+      Las primitivas básicas son <code>send()</code> y <code>receive()</code>. Pueden ser <strong>síncronas (bloqueantes)</strong>, donde el emisor espera hasta que el mensaje es recibido, o <strong>asíncronas (no bloqueantes)</strong>, donde el emisor continúa tras entregar el mensaje al sistema.
+    </p>
+    <div class="simple">
+      📞 Síncrono es una llamada de teléfono (esperas a que descuelguen); asíncrono es enviar un WhatsApp y seguir haciendo tus cosas.
+    </div>
+    <div class="ej" data-s="Proceso A llama a send(B, mensaje)|El núcleo copia el mensaje desde la memoria de A|Si es síncrono, A espera; si es asíncrono, A continúa|Proceso B llama a receive() y obtiene el mensaje"></div>
+    <div class="q" data-q="¿Qué ocurre en un envío síncrono (bloqueante)?|El emisor espera hasta que el mensaje sea recibido|El mensaje se descarta si B está ocupado|Se usa memoria compartida"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · Buzones y colas de mensajes</h2>
+    <p>
+      En la comunicación indirecta los mensajes no se envían directamente a un PID, sino a un <strong>buzón</strong> o <strong>cola de mensajes</strong> gestionada por el núcleo con capacidad limitada o ilimitada.
+    </p>
+    <div class="simple">
+      📬 Un buzón de correos: varios remitentes pueden dejar cartas y el destinatario las recoge en orden cuando está disponible.
+    </div>
+    <div class="sim" data-sim="ipc_msg"></div>
+    <div class="ej" data-s="Se crea una cola de mensajes con msgget()|El emisor deposita un mensaje con msgsnd()|El mensaje queda en la cola FIFO del kernel|El receptor lo extrae con msgrcv()"></div>
+    <div class="q" data-q="¿Qué ventaja tiene usar un buzón (comunicación indirecta)?|Desacopla emisor y receptor sin necesidad de conocerse directamente|Elimina al sistema operativo|Hace innecesaria la CPU"></div>
+  </section>
+
+  <section class="sec">
+    <h2>3 · Tuberías (pipes) y sockets</h2>
+    <p>
+      Las <strong>tuberías (pipes)</strong> conectan la salida de un proceso con la entrada de otro en la misma máquina (como <code>ls | grep txt</code>). Los <strong>sockets</strong> extienden el paso de mensajes a procesos en máquinas distintas a través de la red.
+    </p>
+    <div class="simple">
+      🚿 Un <em>pipe</em> es una manguera unidireccional entre dos procesos vecinos; un <em>socket</em> es un teléfono para hablar con cualquier máquina del mundo.
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo en C: tubería con <code>pipe()</code></summary>
+<pre><code>int fd[2];
+pipe(fd); // fd[0] lectura, fd[1] escritura
+if (fork() == 0) {
+    write(fd[1], "hola", 4);
+} else {
+    char buf[5] = {0};
+    read(fd[0], buf, 4);
+}</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="pipe(fd) crea dos descriptores: lectura fd[0] y escritura fd[1]|Tras fork(), ambos procesos heredan los descriptores|El hijo escribe bytes en fd[1]|El padre lee esos bytes desde fd[0] en orden FIFO"></div>
+    <div class="q" data-q="¿Qué mecanismo permite comunicar procesos en ordenadores distintos por red?|Sockets|Pipes anónimos|Registros de CPU"></div>
+  </section>
+
+  <div class="nav">
+    <a href="10.html">← 10 · Planificación de la CPU</a>
+    <a href="12.html">12 · Memoria compartida →</a>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

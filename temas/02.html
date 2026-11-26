@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 2 · Tipos de sistemas</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Introducción</span>
+  <h1>Tema 2 · Tipos de sistemas</h1>
+
+  <div class="intro-desc">
+    Los sistemas informáticos se clasifican según su arquitectura y propósito. Desde los sistemas por lotes hasta los distribuidos y de tiempo real, cada tipo resuelve necesidades específicas de cómputo e interacción.
+  </div>
+
+  <div class="simple">
+    🍳 Imagina distintos tipos de cocinas: una prepara un menú fijo por tandas (lotes), otra cocina varios platos a la vez mientras algo hierve (multiprogramación), otra atiende mesas por turnos rápidos (tiempo compartido) y una cocina de emergencias debe sacar el plato antes de que suene la alarma (tiempo real).
+  </div>
+
+  <section class="sec">
+    <h2>1 · Sistemas por lotes, multiprogramación y tiempo compartido</h2>
+    <p>
+      Los <strong>sistemas por lotes</strong> procesaban trabajos en secuencia sin interacción del usuario. La <strong>multiprogramación</strong> mantuvo varios programas en memoria para que, cuando uno pida E/S, la CPU pase a otro. El <strong>tiempo compartido</strong> añadió turnos breves (<em>quantums</em>) para dar respuesta interactiva a múltiples usuarios simultáneos.
+    </p>
+    <div class="simple">
+      ⏱️ En lotes haces un plato entero cada vez; en multiprogramación picas verduras mientras hierve la pasta; en tiempo compartido atiendes todas las mesas por turnos cortos para que nadie espere demasiado.
+    </div>
+    <div class="sim" data-sim="tipos_so"></div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo: listar procesos en tiempo compartido con <code>ps</code></summary>
+<pre><code>$ ps aux | head -6
+USER       PID %CPU %MEM    COMMAND
+root         1  0.0  0.1    /sbin/init
+usuario   1420  2.4  3.1    firefox
+usuario   1890  0.8  1.5    code</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="El trabajo A solicita una lectura de disco (E/S)|En un sistema por lotes la CPU quedaría ociosa|En multiprogramación la CPU salta inmediatamente al trabajo B|En tiempo compartido el temporizador reparte turnos cortos entre usuarios"></div>
+    <div class="q" data-q="¿Qué aportó el tiempo compartido respecto a la multiprogramación?|Turnos cortos de CPU para interacción simultánea|Cintas magnéticas más grandes|Eliminar la memoria RAM"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · Sistemas multiprocesador y distribuidos</h2>
+    <p>
+      Un <strong>sistema multiprocesador</strong> (SMP) tiene varias CPUs o núcleos que comparten la misma memoria física y reloj. Un <strong>sistema distribuido</strong> conecta ordenadores independientes por red, cada uno con su propia memoria y disco, colaborando como un sistema único.
+    </p>
+    <div class="simple">
+      👥 Multiprocesador: varios cocineros trabajando en la <em>misma</em> cocina y compartiendo la nevera. Distribuido: varias cocinas en distintas ciudades coordinándose por teléfono.
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo: consultar núcleos en Linux con <code>nproc</code> y <code>lscpu</code></summary>
+<pre><code>$ nproc
+8
+$ lscpu | grep -E "Model name|CPU\(s\):"
+CPU(s):                          8
+Model name:                      Intel(R) Core(TM) i7</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="Un cliente envía una petición web por la red|El balanceador la asigna a un nodo del clúster|El nodo procesa la petición con su propia RAM|Si un nodo falla, otro toma el relevo (alta disponibilidad)"></div>
+    <div class="q" data-q="¿Qué diferencia a un sistema distribuido de un multiprocesador?|Cada nodo tiene su propia memoria y se comunican por red|Tiene menos núcleos|No usa sistema operativo"></div>
+  </section>
+
+  <section class="sec">
+    <h2>3 · Sistemas de tiempo real</h2>
+    <p>
+      En un sistema de <strong>tiempo real</strong> la corrección depende no solo del resultado lógico, sino del <em>instante</em> en que se entrega. En tiempo real <strong>estricto</strong> (<em>hard</em>), incumplir un plazo es un fallo crítico (airbag, freno ABS); en tiempo real <strong>blando</strong> (<em>soft</em>), se toleran retrasos ocasionales (streaming de vídeo).
+    </p>
+    <div class="simple">
+      🧤 Como un portero de fútbol: no importa qué tan espectacular sea la estirada; si llega una décima de segundo tarde, es gol.
+    </div>
+    <div class="ej" data-s="El sensor de la rueda detecta bloqueo al frenar|La unidad de control calcula la presión en microsegundos|Envía la orden al actuador antes del plazo límite|La rueda se libera a tiempo evitando el derrape"></div>
+    <div class="q" data-q="¿Qué define a un sistema de tiempo real estricto?|Garantizar el cumplimiento de los plazos temporales|Tener la mayor tasa de transferencia posible|Ejecutar interfaz gráfica 3D"></div>
+  </section>
+
+  <div class="nav">
+    <a href="01.html">← 1 · Definiciones</a>
+    <a href="03.html">3 · Historia →</a>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

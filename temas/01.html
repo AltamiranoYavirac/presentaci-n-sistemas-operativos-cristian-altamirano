@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 1 · Definiciones</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header><a href="../index.html">Sistemas Operativos · interactivo</a></header>
+<main>
+  <span class="badge">Introducción</span>
+  <h1>Tema 1 · Definiciones</h1>
+  <div class="intro-desc">
+    El <b>sistema operativo (SO)</b> es el intermediario entre tus programas y el hardware. Reparte los recursos (CPU, RAM, disco) y oculta la complejidad física.
+  </div>
+
+  <section class="sec">
+    <h2>1 · ¿Qué es y cómo oculta el hardware?</h2>
+    <p>Su núcleo (<b>kernel</b>) se ejecuta siempre en memoria. Para ti es como el tablero de un coche: solo usas volante y pedales (como <code>printf("Hola")</code>), sin preocuparte del motor.</p>
+    <div class="sim" data-sim="capas_so"></div>
+    <div class="ej" data-s="Enciendes el PC y se carga el núcleo|Tu app llama a printf('Hola')|El núcleo traduce la orden al controlador|La pantalla dibuja el texto"></div>
+    <div class="q" data-q="¿Qué parte del SO está siempre en funcionamiento?|El núcleo (kernel)|El navegador|El editor de texto"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · Gestor de recursos</h2>
+    <p>Como un árbitro, decide qué programa usa la CPU, cuánta RAM recibe cada uno y quién accede al disco sin pisarse.</p>
+    <div class="code-example"><details><summary>Ver ejemplo: ver recursos en tiempo real con <code>top</code></summary><pre><code>$ top
+Tasks: 243 total, 1 running, 242 sleeping
+%Cpu(s): 5.2 us, 1.3 sy, 93.1 id</code></pre></details></div>
+    <div class="ej" data-s="Varios programas piden CPU a la vez|El planificador asigna turnos cortos|Cada programa usa su parte de RAM|Todos avanzan sin bloquearse"></div>
+    <div class="q" data-q="¿Qué función cumple el SO como gestor de recursos?|Repartir CPU, memoria y dispositivos entre programas|Compilar programas en C|Diseñar páginas web"></div>
+  </section>
+
+  <div class="nav"><span></span><a href="02.html">2 · Tipos de sistemas →</a></div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

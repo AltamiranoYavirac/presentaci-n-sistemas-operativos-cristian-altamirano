@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 18 · Almacenamiento secundario</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Gestión del almacenamiento</span>
+  <h1>Tema 18 · Almacenamiento secundario</h1>
+
+  <div class="intro-desc">
+    El almacenamiento secundario (discos duros magnéticos y unidades de estado sólido SSD) conserva los datos de forma persistente. El sistema operativo abstrae sus detalles físicos, planifica las peticiones y ofrece redundancia mediante RAID y gestores de volúmenes.
+  </div>
+
+  <div class="simple">
+    💽 Un disco duro tradicional funciona como un tocadiscos que debe mover el brazo para cambiar de canción; un SSD funciona como una estantería donde alcanzas cualquier libro al instante sin piezas móviles.
+  </div>
+
+  <section class="sec">
+    <h2>1 · Discos magnéticos (HDD) y planificación de brazo</h2>
+    <p>
+      Los discos magnéticos tienen platos giratorios divididos en pistas y sectores. Para leer un sector, el cabezal debe desplazarse a la pista (<em>seek time</em>) y esperar a que el sector gire bajo él (<em>latencia rotacional</em>). Por ello el acceso secuencial es muchísimo más rápido que el aleatorio.
+    </p>
+    <div class="simple">
+      🎵 Cambiar de pista a pista aleatoriamente obliga al brazo mecánico a viajar de un extremo al otro todo el rato.
+    </div>
+    <div class="sim" data-sim="disco"></div>
+    <div class="ej" data-s="Llega una petición para el sector 500|El cabezal se desplaza mecánicamente hasta su pista (seek)|El plato gira hasta colocar el sector bajo el cabezal|Se transfieren los datos a la controladora"></div>
+    <div class="q" data-q="¿Por qué el acceso aleatorio es mucho más lento en un HDD?|Mover el cabezal mecánico cuesta mucho más tiempo que transferir bytes|El cable SATA reduce la velocidad|Los sectores aleatorios están cifrados"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · Unidades SSD y discos ópticos</h2>
+    <p>
+      Los <strong>SSD</strong> usan memoria flash NAND sin partes móviles, por lo que cualquier bloque cuesta casi lo mismo de leer. Sin embargo, para evitar desgastar siempre las mismas celdas aplican <em>wear leveling</em> y requieren borrado previo por bloques.
+    </p>
+    <div class="simple">
+      📚 En un SSD todos los libros están a la misma distancia de tu mano; no hay que esperar a que gire ningún disco.
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo: distinguir HDD de SSD en Linux con <code>lsblk</code></summary>
+<pre><code>$ lsblk -d -o NAME,ROTA,MODEL
+NAME    ROTA MODEL
+nvme0n1    0 Samsung SSD 980
+sda        1 WDC WD10EZEX-00WN4A0
+# ROTA = 0 significa SSD (sin rotación); ROTA = 1 significa HDD</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="El SO solicita el bloque LBA 9000 al SSD|La controladora (FTL) traduce LBA a celda flash física|Lee los bytes electrónicamente sin movimiento mecánico|Entrega los datos con latencia de microsegundos"></div>
+    <div class="q" data-q="¿Por qué en un SSD el acceso aleatorio es casi tan rápido como el secuencial?|No tiene cabezales ni platos mecánicos que mover|Usa una espiral óptica más rápida|Almacena todo en la caché L1 de la CPU"></div>
+  </section>
+
+  <section class="sec">
+    <h2>3 · RAID y volúmenes dinámicos</h2>
+    <p>
+      <strong>RAID</strong> combina varios discos para ganar velocidad o tolerancia a fallos: <strong>RAID 0</strong> (reparte bloques sin redundancia), <strong>RAID 1</strong> (espejo exacto), <strong>RAID 5</strong> (paridad distribuida, tolera 1 fallo) y <strong>RAID 6</strong> (doble paridad, tolera 2 fallos). Los gestores de volúmenes (LVM) permiten además redimensionar particiones dinámicamente.
+    </p>
+    <div class="simple">
+      📑 RAID 1 es guardar una fotocopia de cada documento en otra carpeta; RAID 0 es repartir páginas pares e impares entre dos archivadores para buscar más rápido.
+    </div>
+    <div class="sim" data-sim="raid"></div>
+    <div class="ej" data-s="Se escriben bloques A, B y C en un arreglo RAID|RAID 0 los reparte entre discos (máxima capacidad, 0 tolerancia)|RAID 1 duplica cada bloque en dos discos|RAID 5 calcula un bloque de paridad para reconstruir si falla 1 disco"></div>
+    <div class="q" data-q="¿Qué nivel RAID tolera el fallo de 1 disco usando únicamente 2 discos?|RAID 1|RAID 0|RAID 5"></div>
+  </section>
+
+  <div class="nav">
+    <a href="17.html">← 17 · Memoria virtual</a>
+    <a href="19.html">19 · Sistemas de archivos →</a>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+Abre index.html con doble clic. No necesita instalación.
+Cada apartado: descripción, explicación sencilla, ejemplo paso a paso y pregunta de comprobación.
+Simulaciones: planificación de la CPU (tema 10), disco y RAID (tema 18), permisos y umask (tema 19).
+Los temas con "Contenido provisional" aún no están basados en el texto de los apuntes.

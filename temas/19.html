@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 19 · Sistemas de archivos</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Gestión del almacenamiento</span>
+  <h1>Tema 19 · Sistemas de archivos</h1>
+
+  <div class="intro-desc">
+    El sistema de archivos organiza los bloques sin formato de un disco en archivos y directorios comprensibles. Gestiona sus metadatos (inodos), controla los permisos de acceso y garantiza la coherencia ante cortes de energía.
+  </div>
+
+  <div class="simple">
+    🗂️ El disco crudo es un almacén gigante de cajas numeradas; el sistema de archivos es el catálogo de carpetas, etiquetas, cerraduras y registros de entrada/salida.
+  </div>
+
+  <section class="sec">
+    <h2>1 · Niveles, directorios y metadatos (inodos)</h2>
+    <p>
+      Un sistema de archivos se estructura en capas: sistema lógico → módulo de organización de archivos → sistema básico → control de E/S. En sistemas UNIX, cada archivo tiene un <strong>inodo</strong> (FCB) con permisos, tamaño y punteros a bloques, mientras que el <strong>directorio</strong> solo asocia cada nombre de archivo con su número de inodo.
+    </p>
+    <div class="simple">
+      📇 El directorio es la agenda telefónica (solo tiene nombre y número de ficha); el inodo es la ficha completa con todos los datos.
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo: ver números de inodo y metadatos con <code>ls -li</code> y <code>stat</code></summary>
+<pre><code>$ ls -li notas.txt
+1310742 -rw-r--r-- 1 usuario usuario 1280 nov 25 20:00 notas.txt
+# 1310742 es el número de inodo del archivo</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="El proceso llama a open('/home/user/notas.txt')|El SO busca el nombre 'notas.txt' en el directorio|Obtiene su número de inodo (ej. 1310742)|Carga el inodo en memoria y crea la entrada en la tabla de archivos abiertos"></div>
+    <div class="q" data-q="¿Qué guarda una entrada de directorio en UNIX?|El nombre del archivo y su número de inodo|El contenido completo del archivo|Los sectores magnéticos del SSD"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · Permisos UNIX y <code>umask</code></h2>
+    <p>
+      Cada archivo tiene permisos de lectura (<code>r</code>=4), escritura (<code>w</code>=2) y ejecución (<code>x</code>=1) para tres categorías: <strong>propietario</strong>, <strong>grupo</strong> y <strong>otros</strong>. Al crear un archivo nuevo, la máscara <code>umask</code> desactiva ciertos bits mediante <code>mode &amp; ~umask</code>.
+    </p>
+    <div class="simple">
+      🔑 Tres juegos de llaves para cada puerta: dueño, equipo y visitantes. La <code>umask</code> es el filtro que quita llaves por defecto al crear archivos nuevos.
+    </div>
+    <div class="sim" data-sim="permisos"></div>
+    <div class="ej" data-s="Un programa crea un archivo pidiendo mode 0666 (rw-rw-rw-)|La umask del usuario es 022 (----w--w-)|Se aplica la operación bit a bit: 0666 &amp; ~022|El archivo nace con permisos efectivos 0644 (rw-r--r--)"></div>
+    <div class="q" data-q="Si se crea un archivo con mode 0666 y umask 027, ¿qué permisos resultan?|0640|0666|0637"></div>
+  </section>
+
+  <section class="sec">
+    <h2>3 · Coherencia tras un fallo (Journaling)</h2>
+    <p>
+      Si se corta la luz a mitad de una escritura, el sistema de archivos puede quedar inconsistente. Herramientas como <code>fsck</code> revisan todo el disco lentamente, mientras que el <strong>journaling</strong> (ext4, NTFS) anota primero los cambios previstos en un registro diario antes de aplicarlos.
+    </p>
+    <div class="simple">
+      📓 Journaling es anotar en una libreta lo que vas a hacer antes de mover las cajas; si se va la luz, miras la libreta y sabes exactamente qué quedó a medias.
+    </div>
+    <div class="ej" data-s="El sistema escribe la transacción en el registro (journal)|Marca la transacción como confirmada (commit)|Aplica los cambios reales sobre los bloques del disco|Si ocurre un apagón, al reiniciar rehace las confirmadas y descarta las incompletas"></div>
+    <div class="q" data-q="¿Qué hace el journaling con una transacción no confirmada tras un corte de luz?|La descarta para mantener la coherencia|La duplica en otro disco|Formatea la partición completa"></div>
+  </section>
+
+  <div class="nav">
+    <a href="18.html">← 18 · Almacenamiento secundario</a>
+    <a href="20.html">20 · Implementación de sistemas de archivos →</a>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

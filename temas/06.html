@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 6 · Interfaz de programación</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header><a href="../index.html">Sistemas Operativos · interactivo</a></header>
+<main>
+  <span class="badge">Organización</span>
+  <h1>Tema 6 · Interfaz de programación</h1>
+  <div class="intro-desc">
+    Los programas piden servicios al núcleo mediante <b>llamadas al sistema (syscalls)</b>. En Linux/macOS se usa el estándar <b>POSIX</b> y en Windows la <b>Windows API</b>.
+  </div>
+
+  <section class="sec">
+    <h2>1 · Llamadas al sistema: POSIX vs Windows</h2>
+    <p>No entras tú en la cocina: le pides al camarero (API) y él pasa tu orden al núcleo mediante un <em>trap</em>.</p>
+    <div class="sim" data-sim="syscalls_api"></div>
+    <div class="code-example"><details><summary>Ver ejemplo en C: abrir y leer en POSIX</summary><pre><code>int fd = open("datos.txt", O_RDONLY);
+read(fd, buffer, 100);
+close(fd);</code></pre></details></div>
+    <div class="ej" data-s="Tu programa llama a open()|La biblioteca C lanza una syscall (trap)|El núcleo abre el archivo y devuelve un descriptor|El programa vuelve a modo usuario"></div>
+    <div class="q" data-q="¿Cuál es el equivalente de open() en Windows?|CreateFile()|fork()|ReadFile()"></div>
+  </section>
+
+  <div class="nav"><a href="05.html">← 5 · Servicios</a><a href="07.html">7 · Operación del sistema →</a></div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

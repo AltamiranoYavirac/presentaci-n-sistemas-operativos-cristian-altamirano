@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 17 · Memoria virtual</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Gestión de la memoria</span>
+  <h1>Tema 17 · Memoria virtual</h1>
+
+  <div class="intro-desc">
+    La memoria virtual desacopla el tamaño de los programas de la memoria física disponible: un proceso puede ejecutarse teniendo cargadas en RAM únicamente las páginas que está usando en ese momento.
+  </div>
+
+  <div class="simple">
+    📚 Como un estudiante con una mesa pequeña (RAM) y una gran estantería (disco): solo tienes en la mesa los 3 libros que estás leyendo ahora; cuando necesitas otro, lo traes de la estantería.
+  </div>
+
+  <section class="sec">
+    <h2>1 · Paginación bajo demanda y fallos de página</h2>
+    <p>
+      Con <strong>paginación bajo demanda</strong>, las páginas se cargan del disco solo cuando el programa intenta acceder a ellas. Si una página no está en RAM (bit de validez = 0), el hardware lanza un <strong>fallo de página</strong> (<em>page fault</em>), el SO la trae del disco a un marco libre y reinicia la instrucción.
+    </p>
+    <div class="simple">
+      🍽️ Como pedir platos a la carta según te da hambre, en lugar de servir toda la carta del restaurante en la mesa desde el principio.
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo: observar fallos de página y actividad virtual con <code>vmstat</code></summary>
+<pre><code>$ vmstat 1 3
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 1  0      0 4210000 310200 5120000  0    0    12    24  420  890  4  1 95  0  0</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="El proceso accede a una dirección cuya página tiene bit válido = 0|La MMU genera una trampa de fallo de página|El SO localiza la página en disco y busca un marco libre|Carga la página en RAM, actualiza la tabla y reinicia la instrucción"></div>
+    <div class="q" data-q="¿Cuándo se carga una página en RAM en la paginación bajo demanda?|Únicamente cuando el proceso intenta acceder a ella|Todas a la vez antes de iniciar el programa|Solo cuando el usuario pulsa Ctrl+C"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · Algoritmos de reemplazo y Copy-on-Write (COW)</h2>
+    <p>
+      Cuando la RAM está llena y ocurre un fallo de página, el SO elige una página víctima para sacarla al disco usando algoritmos como <strong>FIFO</strong> (la más antigua) o <strong>LRU</strong> (la menos usada recientemente). Además, <strong>Copy-on-Write</strong> permite que padre e hijo tras <code>fork()</code> compartan páginas en solo-lectura y solo copien una página cuando alguno intenta escribir en ella.
+    </p>
+    <div class="simple">
+      📄 Copy-on-Write es compartir una fotocopia entre dos compañeros: solo haces una copia aparte si uno de los dos va a subrayar o escribir encima.
+    </div>
+    <div class="sim" data-sim="mem_virtual"></div>
+    <div class="ej" data-s="Ocurre un fallo de página y no quedan marcos libres|LRU elige la página que lleva más tiempo sin usarse|Si fue modificada (bit dirty), se guarda primero en swap|Se carga la nueva página en ese marco y se actualiza la tabla"></div>
+    <div class="q" data-q="¿Qué criterio usa el algoritmo LRU para elegir la página víctima?|La página que lleva más tiempo sin ser referenciada|La página que entró primero (orden de llegada)|La página con el número más alto"></div>
+  </section>
+
+  <div class="nav">
+    <a href="16.html">← 16 · Paginación</a>
+    <a href="18.html">18 · Almacenamiento secundario →</a>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

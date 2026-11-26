@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 8 · Sistemas por su estructura</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+  <header>
+    <a href="../index.html">Sistemas Operativos · interactivo</a>
+  </header>
+
+  <main>
+    <span class="badge">Organización</span>
+    <h1>Tema 8 · Sistemas por su estructura</h1>
+
+    <div class="intro-desc">
+      La forma en que se organiza por dentro un sistema operativo define si prioriza la <b>velocidad</b> (todo junto en el núcleo) o la <b>estabilidad</b> (piezas separadas e independientes).
+    </div>
+
+    <div class="sec">
+      <h2>1 · Monolítico, Por Capas y Microkernel</h2>
+      <p>Un núcleo <b>monolítico</b> mete todo junto (muy rápido, pero un fallo tumba todo). <b>Por capas</b> ordena en niveles. Un <b>microkernel</b> deja lo mínimo en el núcleo y saca servicios fuera (muy estable, pero más lento por los mensajes).</p>
+      <div class="sim" data-sim="arquitecturas"></div>
+      <div class="ej" data-s="Monolítico: todo en Ring 0, acceso directo|Por capas: cada nivel habla solo con el inferior|Microkernel: servicios aislados en Ring 3|Si falla un driver en microkernel, el sistema no se apaga"></div>
+      <div class="q" data-q="¿Qué ventaja tiene el microkernel si falla un driver?|El sistema sigue funcionando y solo reinicia ese driver|Es más rápido que el monolítico|No necesita memoria RAM"></div>
+    </div>
+
+    <div class="sec">
+      <h2>2 · Módulos cargables y Máquinas virtuales</h2>
+      <p>Linux combina lo mejor de ambos mundos con <b>módulos cargables</b> (piezas que se enchufan al núcleo sin reiniciar). Por encima, las <b>máquinas virtuales</b> simulan hardware completo para aislar varios sistemas en un mismo PC.</p>
+      <div class="sim" data-sim="modulos"></div>
+      <div class="ej" data-s="Conectas un dispositivo USB nuevo|El sistema busca el módulo usb_storage|Comprueba si necesita Base USB (usbcore)|Lo enchufa al núcleo en caliente sin reiniciar"></div>
+      <div class="q" data-q="¿Qué permite hacer un módulo cargable?|Añadir o quitar drivers al núcleo sin reiniciar el equipo|Ejecutar juegos sin tarjeta gráfica|Borrar la BIOS"></div>
+    </div>
+
+    <div class="nav">
+      <a href="07.html">← 7 · Operación del sistema</a>
+      <a href="09.html">9 · Procesos →</a>
+    </div>
+  </main>
+
+  <script src="../js/sims.js"></script>
+  <script src="../js/seccion.js"></script>
+</body>
+</html>

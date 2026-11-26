@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 16 · Paginación</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Gestión de la memoria</span>
+  <h1>Tema 16 · Paginación</h1>
+
+  <div class="intro-desc">
+    La paginación divide la memoria lógica en bloques de tamaño fijo llamados <strong>páginas</strong> y la memoria física en bloques del mismo tamaño llamados <strong>marcos</strong>. Así un proceso puede ocupar marcos no contiguos, eliminando la fragmentación externa.
+  </div>
+
+  <div class="simple">
+    📖 Imagina desencuadernar un libro en hojas sueltas numeradas (páginas) y guardar cada hoja en cualquier hueco libre de una estantería (marcos). Un índice (tabla de páginas) te dice en qué estante está cada hoja.
+  </div>
+
+  <section class="sec">
+    <h2>1 · Páginas, marcos y tabla de páginas</h2>
+    <p>
+      Toda dirección lógica se divide en dos partes: <strong>número de página (p)</strong> y <strong>desplazamiento (d)</strong>. La <strong>tabla de páginas</strong> traduce <code>p</code> al número de marco físico <code>f</code>, mientras que el desplazamiento <code>d</code> no cambia.
+    </p>
+    <div class="simple">
+      🔢 Si cada página mide 4096 bytes, la página te dice en qué "caja" buscar y el desplazamiento te dice cuántos pasos dar dentro de esa caja.
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo: consultar el tamaño de página en Linux</summary>
+<pre><code>$ getconf PAGESIZE
+4096</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="La CPU genera la dirección lógica (página p, desplazamiento d)|La MMU consulta la entrada p en la tabla de páginas del proceso|Obtiene el marco físico f asignado en la RAM|Forma la dirección física: f × tamaño_página + d"></div>
+    <div class="q" data-q="¿Qué ventaja principal ofrece la paginación frente a la asignación contigua?|Elimina la fragmentación externa permitiendo bloques no contiguos|Elimina la necesidad de memoria RAM|Hace que los discos SSD sean más grandes"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · La TLB y tablas multinivel</h2>
+    <p>
+      Consultar la tabla de páginas en RAM en cada acceso doblaría el tiempo de memoria. Para evitarlo, la CPU incluye una caché ultrarrápida llamada <strong>TLB</strong> (<em>Translation Lookaside Buffer</em>) que guarda las traducciones recientes. Además, para espacios de 64 bits se usan <strong>tablas multinivel</strong> para no desperdiciar RAM.
+    </p>
+    <div class="simple">
+      ✋ La TLB es como apuntarte en la palma de la mano el número de teléfono al que llamas todo el día para no buscarlo cada vez en la agenda.
+    </div>
+    <div class="sim" data-sim="paginacion"></div>
+    <div class="ej" data-s="La MMU busca primero la página p en la TLB|Si hay acierto (TLB Hit), obtiene el marco f al instante|Si hay fallo (TLB Miss), lee la tabla de páginas en RAM|Guarda la traducción (p → f) en la TLB para próximos accesos"></div>
+    <div class="q" data-q="¿Para qué sirve la TLB en la gestión de memoria?|Acelerar la traducción de direcciones lógicas a físicas|Guardar archivos temporales del navegador|Comprimir la memoria Swap"></div>
+  </section>
+
+  <div class="nav">
+    <a href="15.html">← 15 · Memoria principal</a>
+    <a href="17.html">17 · Memoria virtual →</a>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

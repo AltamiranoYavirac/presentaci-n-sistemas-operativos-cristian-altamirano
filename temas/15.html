@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 15 · Memoria principal</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Gestión de la memoria</span>
+  <h1>Tema 15 · Memoria principal</h1>
+
+  <div class="intro-desc">
+    La memoria principal (RAM) almacena los programas y datos en ejecución. El sistema operativo debe repartirla entre procesos, proteger el espacio de cada uno y traducir direcciones lógicas a direcciones físicas reales.
+  </div>
+
+  <div class="simple">
+    🏘️ Imagina una avenida con parcelas (la RAM): cada programa recibe su propio terreno vallado para construir su casa sin invadir la del vecino.
+  </div>
+
+  <section class="sec">
+    <h2>1 · Asignación contigua y fragmentación</h2>
+    <p>
+      En la <strong>asignación contigua</strong>, cada proceso ocupa un bloque continuo de RAM. Para elegir en qué hueco libre colocar un proceso nuevo se usan estrategias como <strong>Primer ajuste</strong> (el primero que quepa), <strong>Mejor ajuste</strong> (el más ajustado) o <strong>Peor ajuste</strong> (el más grande). Al entrar y salir procesos aparecen huecos dispersos llamados <strong>fragmentación externa</strong>.
+    </p>
+    <div class="simple">
+      🅿️ Como aparcar coches en una calle sin líneas pintadas: aunque sumen 5 metros libres entre tres huecos pequeños, un coche de 4 metros no cabe.
+    </div>
+    <div class="sim" data-sim="mem_contigua"></div>
+    <div class="ej" data-s="Hay huecos libres de 100 KB, 300 KB y 250 KB|Llega un proceso de 120 KB|Primer ajuste elige el de 300 KB; Mejor ajuste elige el de 250 KB|Tras varias liberaciones quedan huecos pequeños dispersos (fragmentación externa)"></div>
+    <div class="q" data-q="¿Qué es la fragmentación externa?|Memoria libre dividida en huecos pequeños no contiguos que no se pueden aprovechar|Memoria rota físicamente en el chip|Un archivo borrado en el disco"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · Reubicación, protección e intercambio (swapping)</h2>
+    <p>
+      Cada proceso trabaja con <strong>direcciones lógicas</strong> (empezando en 0). La MMU suma el <strong>registro base</strong> para obtener la dirección física y verifica con el <strong>registro límite</strong> que no invada memoria ajena. Si falta RAM, el SO puede mover temporalmente un proceso entero a disco (<em>swapping</em>).
+    </p>
+    <div class="simple">
+      🚧 El registro base es el número de portal donde empieza tu edificio; el registro límite es la altura máxima permitida para no entrar en el piso del vecino.
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo: consultar memoria RAM y Swap en Linux con <code>free</code></summary>
+<pre><code>$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       6.2Gi       4.1Gi       312Mi       5.2Gi       8.9Gi
+Swap:          2.0Gi          0B       2.0Gi</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="La CPU genera la dirección lógica 120|La MMU comprueba que 120 &lt; límite (ej. 500)|Suma el registro base (ej. 1000) → dirección física 1120|Si supera el límite, el hardware lanza una excepción de violación de segmento"></div>
+    <div class="q" data-q="¿Qué comprueba el registro límite en la MMU?|Que la dirección lógica no exceda el tamaño asignado al proceso|La temperatura de la memoria RAM|El número de núcleos de la CPU"></div>
+  </section>
+
+  <div class="nav">
+    <a href="14.html">← 14 · Sincronización</a>
+    <a href="16.html">16 · Paginación →</a>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

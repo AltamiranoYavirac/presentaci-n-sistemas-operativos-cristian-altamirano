@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 9 · Procesos</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Gestión de procesos</span>
+  <h1>Tema 9 · Procesos</h1>
+
+  <div class="intro-desc">
+    Un proceso es un programa en ejecución. Mientras que un programa es un archivo pasivo en disco, un proceso es una entidad activa con su propio espacio de memoria, contador de programa, pila y un bloque de control (PCB).
+  </div>
+
+  <div class="simple">
+    🍳 La <strong>receta</strong> escrita en un papel es el <em>programa</em>. El acto de estar cocinándola ahora mismo, con tus ingredientes en la mesa y sabiendo en qué paso vas, es el <em>proceso</em>. Dos personas pueden cocinar la misma receta a la vez: serán dos procesos distintos.
+  </div>
+
+  <section class="sec">
+    <h2>1 · Estados de un proceso</h2>
+    <p>
+      Durante su vida, un proceso cambia de estado: <strong>Nuevo</strong> (creándose), <strong>Listo</strong> (esperando turno de CPU), <strong>Ejecutando</strong> (en la CPU), <strong>Bloqueado</strong> (esperando E/S o un evento) y <strong>Terminado</strong> (finalizado).
+    </p>
+    <div class="simple">
+      🏥 Como un paciente en el hospital: llega (Nuevo), espera en la sala (Listo), entra a consulta (Ejecutando), va a hacerse una radiografía (Bloqueado) y recibe el alta (Terminado).
+    </div>
+    <div class="sim" data-sim="estados_proc"></div>
+    <div class="ej" data-s="El proceso se crea y pasa a estado Nuevo|El SO lo admite en RAM y pasa a Listo|El planificador le asigna CPU → Ejecutando|Pide leer un archivo → pasa a Bloqueado hasta que termine el disco"></div>
+    <div class="q" data-q="¿En qué estado está un proceso que espera la llegada de datos de red?|Bloqueado|Listo|Terminado"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · PCB (Bloque de Control de Proceso)</h2>
+    <p>
+      El sistema operativo representa cada proceso mediante una estructura de datos llamada <strong>PCB</strong> (<em>Process Control Block</em>). Guarda su identificador (PID), estado actual, contador de programa, registros de la CPU, información de memoria y archivos abiertos.
+    </p>
+    <div class="simple">
+      📋 El PCB es la <strong>ficha médica</strong> del proceso: si el médico (CPU) cambia de paciente, anota todo en la ficha para poder continuar exactamente donde lo dejó después.
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo: inspeccionar el estado de un proceso en <code>/proc</code></summary>
+<pre><code>$ cat /proc/self/status | head -8
+Name:   cat
+State:  R (running)
+Pid:    4521
+PPid:   3100
+VmSize: 8420 kB</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="Ocurre un cambio de contexto en la CPU|El kernel guarda los registros del proceso A en su PCB|Carga los registros del proceso B desde el PCB de B|La CPU continúa ejecutando B exactamente donde estaba"></div>
+    <div class="q" data-q="¿Qué guarda el PCB durante un cambio de contexto?|Estado, registros de CPU, PID y recursos del proceso|El código fuente original en C|Solo el nombre del usuario"></div>
+  </section>
+
+  <section class="sec">
+    <h2>3 · Creación y terminación: <code>fork()</code>, <code>exec()</code> y <code>wait()</code></h2>
+    <p>
+      En sistemas POSIX, <code>fork()</code> crea un proceso hijo duplicando al padre (devuelve <code>0</code> al hijo y el PID del hijo al padre). Luego, el hijo suele llamar a <code>exec()</code> para reemplazar su memoria por un programa nuevo, mientras el padre espera con <code>wait()</code>.
+    </p>
+    <div class="simple">
+      🐑 <code>fork()</code> hace una fotocopia exacta de ti; luego el clon usa <code>exec()</code> para ponerse otro uniforme y hacer un trabajo diferente.
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo en C: crear un proceso hijo con <code>fork()</code> y <code>execlp()</code></summary>
+<pre><code>pid_t pid = fork();
+if (pid == 0) {
+    // Estamos en el proceso hijo
+    execlp("ls", "ls", "-l", NULL);
+} else if (pid &gt; 0) {
+    // Estamos en el proceso padre
+    wait(NULL); // Esperar a que termine el hijo
+}</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="El proceso padre invoca fork()|El SO duplica el PCB y crea un nuevo PID para el hijo|En el hijo fork() retorna 0; en el padre retorna el PID del hijo|El hijo ejecuta execlp() para cargar otro programa|El padre llama a wait() para recoger su estado de salida"></div>
+    <div class="q" data-q="¿Qué valor devuelve fork() dentro del proceso hijo?|0|El PID del padre|-1"></div>
+  </section>
+
+  <div class="nav">
+    <a href="08.html">← 8 · Sistemas por su estructura</a>
+    <a href="10.html">10 · Planificación de la CPU →</a>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>

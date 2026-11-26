@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tema 12 · Memoria compartida</title>
+  <link rel="stylesheet" href="../css/estilo.css">
+</head>
+<body>
+<header>
+  <a href="../index.html">Sistemas Operativos · interactivo</a>
+</header>
+<main>
+  <span class="badge">Gestión de procesos</span>
+  <h1>Tema 12 · Memoria compartida</h1>
+
+  <div class="intro-desc">
+    La memoria compartida permite que dos o más procesos mapeen la misma región de RAM en sus espacios de direcciones. Es el método de comunicación más rápido porque evita copiar datos a través del núcleo.
+  </div>
+
+  <div class="simple">
+    📝 Es como una <strong>pizarra común</strong> en una oficina: cualquiera puede escribir o leer directamente en ella sin enviar cartas, pero si dos escriben encima a la vez, se arma un lío.
+  </div>
+
+  <section class="sec">
+    <h2>1 · Región de memoria compartida y <code>mmap()</code></h2>
+    <p>
+      Por defecto, el SO aísla la memoria de cada proceso. Para compartir memoria, un proceso solicita una región compartida (<code>shmget/shmat</code> o <code>shm_open + mmap</code>) y otros se adjuntan a ella. A partir de ese instante, el kernel ya no interviene en cada lectura o escritura.
+    </p>
+    <div class="simple">
+      ⚡ El kernel solo abre la puerta de la sala común; luego los procesos hablan directamente a velocidad de RAM.
+    </div>
+    <div class="code-example">
+      <details>
+        <summary>Ver ejemplo en C: mapear memoria compartida con <code>mmap()</code></summary>
+<pre><code>int fd = shm_open("/mi_shm", O_CREAT | O_RDWR, 0666);
+ftruncate(fd, 4096);
+void *ptr = mmap(NULL, 4096, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+// Ahora ptr apunta a memoria compartida entre procesos</code></pre>
+      </details>
+    </div>
+    <div class="ej" data-s="Proceso A crea un objeto de memoria compartida|A y B lo mapean con mmap() en su espacio de direcciones|A escribe datos en el puntero mapeado|B lee inmediatamente los mismos bytes físicos sin llamadas al sistema"></div>
+    <div class="q" data-q="¿Por qué la memoria compartida es más rápida que el paso de mensajes?|No requiere copiar datos ni invocar al kernel en cada lectura/escritura|No usa memoria RAM|Se sincroniza automáticamente sin código extra"></div>
+  </section>
+
+  <section class="sec">
+    <h2>2 · El problema productor-consumidor</h2>
+    <p>
+      Un patrón clásico sobre memoria compartida es el <strong>productor-consumidor</strong>: un proceso genera datos y los deposita en un búfer circular de tamaño fijo, mientras otro los extrae. Si el búfer está lleno, el productor debe esperar; si está vacío, espera el consumidor.
+    </p>
+    <div class="simple">
+      🍣 Como una cinta transportadora de sushi: el cocinero pone platos mientras haya huecos libres y el cliente los coge mientras haya platos disponibles.
+    </div>
+    <div class="sim" data-sim="shm_prodcons"></div>
+    <div class="ej" data-s="El productor verifica que el búfer circular no esté lleno|Escribe el nuevo elemento y avanza el índice in|El consumidor verifica que el búfer no esté vacío|Lee el elemento y avanza el índice out"></div>
+    <div class="q" data-q="¿Qué debe hacer el productor si el búfer compartido está lleno?|Esperar hasta que el consumidor libere un hueco|Sobrescribir el dato más antiguo sin avisar|Cerrar el sistema operativo"></div>
+  </section>
+
+  <div class="nav">
+    <a href="11.html">← 11 · Paso de mensajes</a>
+    <a href="13.html">13 · Hilos →</a>
+  </div>
+</main>
+<script src="../js/sims.js"></script>
+<script src="../js/seccion.js"></script>
+</body>
+</html>
